@@ -2,6 +2,7 @@ import requests
 import ssl
 import urllib3
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 # Map month numbers.
@@ -45,13 +46,42 @@ def parse_excel_links(html_content):
     Returns the last href found (the most recent one).
     """
     soup = BeautifulSoup(html_content, "html.parser")
+    # Find the specific article class.
+    article = soup.find('article', class_='art_loop')
+    if not article:
+        print("No article with class 'art_loop' found.")
+        return None
+    
     elements = soup.find_all(
-        'a',
-        class_="art_loop"
+        'a'#,
+        #class_="art_loop"
     )
-    #hrefs = 
-    return None
+    hrefs = [element.get('href') for element in elements if element.get('href') and '.xls' in element.get('href')]
+     # If hrefs list empty, return None
+    if not hrefs:
+        print("No links found.")
+        return None
+    return hrefs[-1]            ##### Returns only the last href.!!!!
 
+
+# Add to main function at the end.
 url = "https://yigm.ktb.gov.tr/TR-366207/2024.html"
+
 html_content = fetch_page_content(url)
-print(html_content)
+hrefs = parse_excel_links(html_content)
+# Control
+# print(hrefs)
+####################################################################
+    # HTML Control.
+#if html_content:
+#    print(html_content.decode('utf-8'))  # HTML içeriğini yazdır
+#else:
+#    print("Failed to fetch HTML content.")
+
+    # Control.
+#if html_content:
+#    hrefs = parse_excel_links(html_content)
+#    print(hrefs)  # Hrefs listesini yazdır
+#else:
+#    print("Failed to fetch HTML content.")
+####################################################################

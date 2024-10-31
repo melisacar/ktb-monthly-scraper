@@ -1,5 +1,4 @@
 # KTB Monthly Scraper
-
 ## Error Handling
 
 1. If you wish to install a Python library that isn't in Homebrew,

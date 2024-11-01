@@ -68,7 +68,7 @@ def parse_pdf_links(html_content):
 url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
 
 html_content = fetch_page_content(url)
-hrefs = parse_excel_links(html_content)
+hrefs = parse_pdf_links(html_content)
 
 # Control
 print(hrefs)

@@ -40,7 +40,7 @@ def fetch_page_content(url):
         print(f"Failed to retrieve the page. Status code is {resp.status_code}")
         return None
 
-def parse_excel_links(html_content):
+def parse_pdf_links(html_content):
     """
     Parses the HTML content to find all PDF file links.
     Returns the last href found (the most recent one).
@@ -61,7 +61,7 @@ def parse_excel_links(html_content):
     if not hrefs:
         print("No links found.")
         return None
-    return hrefs[-1]            ##### Returns only the last href.!!!! Here is Ocak 2024
+    return hrefs[-1]            ##### Returns only the last href.!!!! Here is Agustos 2024
 
 
 # Add to main function at the end.

@@ -3,6 +3,8 @@ import ssl
 import urllib3
 from bs4 import BeautifulSoup
 import pandas as pd
+import urllib.parse
+from urllib.parse import urljoin
 
 
 # Map month numbers.
@@ -26,7 +28,7 @@ def disable_ssl_warnings():
     Disables SSL certificate verification and suppresses InsecureRequestWarning.
     """
     ssl._create_default_https_content = ssl._create_unverified_context
-    urllib3.disable_warnings(urllib3.exception.InsecureRequestWarning)
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def fetch_page_content(url):
     """
@@ -46,36 +48,16 @@ def parse_pdf_links(html_content):
     Returns the last href found (the most recent one).
     """
     soup = BeautifulSoup(html_content, "html.parser")
-    # Find the specific article class.
-    #links = soup.find_all('a', style='font-family: Georgia; font-size: 14px;')
-    # Tüm `a` etiketlerini bul ve sadece .pdf dosya linklerini seç
+
     pdf_links = []
 
-    # Tüm a etiketlerini al ve .pdf ile biten href linklerini filtrele
     for a_tag in soup.find_all('a'):
         href = a_tag.get('href')
         if href and '.pdf' in href:
-            pdf_links.append(href)  # .pdf içeren href'leri listeye ekle
+            pdf_links.append(href)  
 
-    # Çıktıyı göster
-    print(pdf_links)
-    
-    #if not links:
-    #    print("No link with class 'font-family: Georgia; font-size: 14px;' found.")
-    #    return None
-    
-    #elements = soup.find_all(
-    #    'a'
-    #)
-    #hrefs = [element.get('href') for element in elements if element.get('href') and '.pdf' in element.get('href')]
-    #hrefs = [link.get('href') for link in links if link.get('href') and '.pdf' in link.get('href')]
-     # If hrefs list empty, return None
-    #if not hrefs:
-    #    print("No links found.")
-    #    return None
-    #return hrefs
-
-
+    print(pdf_links[-1])
+    return pdf_links[-1] if pdf_links else None
 
 
 # Control
@@ -98,17 +80,13 @@ def parse_pdf_links(html_content):
 
 def extract_month_number(month_string):
     """
-    Extracts the month number from the month string (e.g. "TEMMUZ"). 
+    Extracts the month number from the month string (e.g. "TEMMUZ 2024"). 
     Returns the month number as an integer.
     """
     for month, name in months_mapping.items():
-        #print(month)
-        #print(name)
-
-        if month_string.strip().upper() == name:
-         
+         if name.upper() in month_string.upper(): 
+            print(month)
             return month
-        #print(month_string.strip().upper())
     return None
 
 def find_newest_month_html(html_content):
@@ -119,27 +97,55 @@ def find_newest_month_html(html_content):
     month_numbers = []
 
     td_elements = soup.find_all('a')
-    #td_elements = soup.find_all('a', style=lambda x: x and "font-family: Georgia" in x and "font-size: 14px" in x)
 
     for td in td_elements:
         href = td.get('href')
         if href and '.pdf' in href:
             month_string = td.get_text()
-            print(month_string)
+            #print(month_string)
             month_number = extract_month_number(month_string)
             if month_number:
                 month_numbers.append(month_number)
+    #print(max(month_numbers))
+    return max(month_numbers, default=None)
 
-    return month_numbers
 
 
-# Add to main function at the end.
+# Downloading func.
+def download_pdf_file(href, base_url):
+    """
+    Downloads the PDF file from the given href.
+    Returns the content of the file if successful, else None.
+    """
+    full_url = urljoin(base_url, href)  
+    #print(full_url)
+    response = requests.get(full_url, verify=False)
+
+    if response.status_code == 200:
+        pdf_filename = href.split("/")[-1].split("?")[0]
+        pdf_path = f"./{pdf_filename}"
+
+        with open(pdf_path, "wb") as f:
+            f.write(response.content)
+
+            print(f"Downloaded: {pdf_filename}")
+        return True
+    else:
+        print(f"Failed to retrieve {href}, status code: {response.status_code}")
+        return False
+    
+########################################################################################
 url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
-
+base_url = "https://istanbul.ktb.gov.tr" 
+disable_ssl_warnings()
 
 html_content = fetch_page_content(url)
 hrefs = parse_pdf_links(html_content)
 
-
 newest_month = find_newest_month_html(html_content)
 #print(newest_month)
+if hrefs: 
+    download_pdf_file(hrefs, base_url)  
+else:
+    print("No PDF link found.")
+########################################################################################

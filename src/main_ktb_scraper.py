@@ -47,21 +47,33 @@ def parse_pdf_links(html_content):
     """
     soup = BeautifulSoup(html_content, "html.parser")
     # Find the specific article class.
-    links = soup.find_all('a', style='font-family: Georgia; font-size: 14px;')
+    #links = soup.find_all('a', style='font-family: Georgia; font-size: 14px;')
+    # Tüm `a` etiketlerini bul ve sadece .pdf dosya linklerini seç
+    pdf_links = []
+
+    # Tüm a etiketlerini al ve .pdf ile biten href linklerini filtrele
+    for a_tag in soup.find_all('a'):
+        href = a_tag.get('href')
+        if href and '.pdf' in href:
+            pdf_links.append(href)  # .pdf içeren href'leri listeye ekle
+
+    # Çıktıyı göster
+    print(pdf_links)
     
-    if not links:
-        print("No link with class 'font-family: Georgia; font-size: 14px;' found.")
-        return None
+    #if not links:
+    #    print("No link with class 'font-family: Georgia; font-size: 14px;' found.")
+    #    return None
     
-    elements = soup.find_all(
-        'a'
-    )
-    hrefs = [element.get('href') for element in elements if element.get('href') and '.pdf' in element.get('href')]
+    #elements = soup.find_all(
+    #    'a'
+    #)
+    #hrefs = [element.get('href') for element in elements if element.get('href') and '.pdf' in element.get('href')]
+    #hrefs = [link.get('href') for link in links if link.get('href') and '.pdf' in link.get('href')]
      # If hrefs list empty, return None
-    if not hrefs:
-        print("No links found.")
-        return None
-    return hrefs           ##### Returns only the last href.!!!! Here is Agustos 2024
+    #if not hrefs:
+    #    print("No links found.")
+    #    return None
+    #return hrefs
 
 
 
@@ -86,12 +98,17 @@ def parse_pdf_links(html_content):
 
 def extract_month_number(month_string):
     """
-    Extracts the month number from the month string (e.g. "TEMMUZ SONU"). 
+    Extracts the month number from the month string (e.g. "TEMMUZ"). 
     Returns the month number as an integer.
     """
     for month, name in months_mapping.items():
+        #print(month)
+        #print(name)
+
         if month_string.strip().upper() == name:
+         
             return month
+        #print(month_string.strip().upper())
     return None
 
 def find_newest_month_html(html_content):
@@ -101,9 +118,12 @@ def find_newest_month_html(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     month_numbers = []
 
-    td_elements = soup.find_all('a', style='font-family: Georgia; font-size: 14px;')
+    td_elements = soup.find_all('a')
+    #td_elements = soup.find_all('a', style=lambda x: x and "font-family: Georgia" in x and "font-size: 14px" in x)
+
     for td in td_elements:
-        if '.pdf' in td.get('href'):  # Sadece PDF bağlantıları
+        href = td.get('href')
+        if href and '.pdf' in href:
             month_string = td.get_text()
             print(month_string)
             month_number = extract_month_number(month_string)

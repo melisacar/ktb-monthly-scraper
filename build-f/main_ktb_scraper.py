@@ -1,9 +1,9 @@
+#Downloads pdfs.
 import requests
 import ssl
 import urllib3
 from bs4 import BeautifulSoup
 import pandas as pd
-import urllib.parse
 from urllib.parse import urljoin
 
 

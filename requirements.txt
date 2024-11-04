@@ -1,2 +1,6 @@
 bs4
 requests
+PyPDF2
+#tabula-py
+#tabulate
+pdfplumber

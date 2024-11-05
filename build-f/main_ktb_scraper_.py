@@ -8,7 +8,7 @@ from PyPDF2 import PdfReader
 import urllib.parse
 from urllib.parse import urljoin
 
-from tabula import read_pdf
+#from tabula import read_pdf
 from tabulate import tabulate
 import pdfplumber
 
@@ -64,8 +64,8 @@ def find_newest_month_html(html_content):
 
 def read_pdf_from_url(hrefs, base_url):
     """
-    Downloads the PDF content from the given href, reads it directly from memory,
-    and prints the extracted text.
+    Reads the PDF content from the given href.
+    Prints the extracted text.
     """
     full_url = urljoin(base_url, hrefs)
     response = requests.get(full_url, verify=False)

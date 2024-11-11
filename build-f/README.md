@@ -31,20 +31,18 @@ This repository contains three Python scripts designed to scrape tourism statist
 
 4. `main_all_months_scraper.py`
 
-**Purpose**: 
-Downloads the most recent PDF file containing tourism statistics from the specified URL and extracts monthly data for "Türkiye" and "İstanbul."
+- **Purpose**: Downloads the most recent PDF file containing tourism statistics from the specified URL and extracts monthly data for "Türkiye" and "İstanbul."
 
-**Functionality**:
-- Connects to the target website and retrieves HTML content.
-- Parses the HTML to locate PDF links.
-- Identifies the most recent PDF file based on month information within the link.
-- Downloads the PDF file and analyzes it to extract monthly data.
-- Reads each page in the PDF to find and display tourism statistics for "Türkiye" and "İstanbul" for each month, starting from the latest month and working backward to January.
+- **Functionality**:
+  - Connects to the target website and retrieves HTML content.
+  - Parses the HTML to locate PDF links.
+  - Identifies the most recent PDF file based on month information within the link.
+  - Downloads the PDF file and analyzes it to extract monthly data.
+  - Reads each page in the PDF to find and display tourism statistics for "Türkiye" and "İstanbul" for each month, starting from the latest month and working backward to January.
 
-**Differences**:
-Unlike a simple PDF downloader, this script:
-- Analyzes the content of the PDF to extract specific tourism data by month.
-- Extracts and displays tourism data for "Türkiye" and "İstanbul" directly from the file, allowing for targeted data analysis.
+- **Differences**: Unlike a simple PDF downloader, this script:
+  - Analyzes the content of the PDF to extract specific tourism data by month.
+  - Extracts and displays tourism data for "Türkiye" and "İstanbul" directly from the file, allowing for targeted data analysis.
 
 ## Usage Notes
 

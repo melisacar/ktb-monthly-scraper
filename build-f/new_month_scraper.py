@@ -78,7 +78,6 @@ def get_year_from_page(pdf, page_number):
     return None
 
 
-
 def read_pdf_from_url(hrefs, base_url, target_month):
     """
     Reads the PDF content from the given href and extracts the first row containing the target month.

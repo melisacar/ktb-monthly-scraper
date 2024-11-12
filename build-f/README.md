@@ -5,6 +5,7 @@ This repository contains three Python scripts designed to scrape tourism statist
 ## Overview of Scripts
 
 ### 1. `main_ktb_scraper.py`
+
 - **Purpose**: Downloads the most recent PDF file containing tourism statistics.
 - **Functionality**:
   - Connects to the target website and retrieves HTML content.
@@ -14,6 +15,7 @@ This repository contains three Python scripts designed to scrape tourism statist
 - **Differences**: Focuses solely on downloading PDF files without extracting or analyzing the contents of the PDFs.
 
 ### 2. `main_ktb_scraper_.py`
+
 - **Purpose**: Downloads the most recent PDF file and reads its content.
 - **Functionality**:
   - Performs similar steps to `main_ktb_scraper.py` for downloading the latest PDF.
@@ -22,6 +24,7 @@ This repository contains three Python scripts designed to scrape tourism statist
 - **Differences**: This script goes beyond downloading by directly reading and displaying PDF content, which is useful for quick data previews.
 
 ### 3. `new_month_scraper.py`
+
 - **Purpose**: Extracts specific month-related data from a PDF and verifies the year.
 - **Functionality**:
   - Identifies and downloads the most recent PDF.
@@ -29,7 +32,7 @@ This repository contains three Python scripts designed to scrape tourism statist
   - Searches for a particular month in the PDF content and prints the relevant row.
 - **Differences**: Adds advanced functionality by verifying the year and filtering rows based on the target month. This is ideal for monthly data extraction with additional accuracy.
 
-4. `main_all_months_scraper.py`
+### 4. `main_all_months_scraper.py`
 
 - **Purpose**: Downloads the most recent PDF file containing tourism statistics from the specified URL and extracts monthly data for "Türkiye" and "İstanbul."
 

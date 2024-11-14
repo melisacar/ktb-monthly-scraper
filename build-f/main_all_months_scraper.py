@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from io import BytesIO
 from urllib.parse import urljoin
 import pdfplumber
+import pandas as pd
 
 # Map month numbers
 months_mapping = {
@@ -72,6 +73,7 @@ def get_year_from_page(pdf, page_number):
 def read_pdf_from_url(href, base_url, latest_month):
     full_url = urljoin(base_url, href)
     response = requests.get(full_url, verify=False)
+    output = []
 
     if response.status_code == 200:
         pdf_content = BytesIO(response.content)
@@ -101,8 +103,8 @@ def read_pdf_from_url(href, base_url, latest_month):
                                     turkiye_value = value[3]
                                     istanbul_value = value[7]
                                     date_prefix = f"{year}-{month_num:02d}-01"
-                                    print(f"{date_prefix} Türkiye {turkiye_value}")
-                                    print(f"{date_prefix} İstanbul {istanbul_value}")
+                                    output.append([date_prefix, "Türkiye", turkiye_value])
+                                    output.append([date_prefix, "İstanbul", istanbul_value])
                                 except IndexError:
                                     print(f"Data not found in expected position for {month_name}. Line: {line}")
                                 break
@@ -112,20 +114,31 @@ def read_pdf_from_url(href, base_url, latest_month):
                     print(f"{month_name} not found in PDF.")
     else:
         print(f"PDF alınamadı {full_url}, durum kodu: {response.status_code}")
-
-# Main script execution
-url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
-base_url = "https://istanbul.ktb.gov.tr"
-disable_ssl_warnings()
-
-html_content = fetch_page_content(url)
-if html_content:
-    href = parse_pdf_links(html_content)
-    newest_month = find_newest_month_html(html_content)
     
-    if href and newest_month:
-        read_pdf_from_url(href, base_url, newest_month)
+    df = pd.DataFrame(output, columns=["tarih","ist_tr","ziyaretci_sayisi"])
+    
+    return df
+
+
+
+def main_all():
+    # Main script execution
+    url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
+    base_url = "https://istanbul.ktb.gov.tr"
+    disable_ssl_warnings()
+
+    html_content = fetch_page_content(url)
+    if html_content:
+        href = parse_pdf_links(html_content)
+        newest_month = find_newest_month_html(html_content)
+        
+        if href and newest_month:
+            df = read_pdf_from_url(href, base_url, newest_month)
+            print(df)
+        else:
+            print("No PDF link found or no valid month found.")
     else:
-        print("No PDF link found or no valid month found.")
-else:
-    print("Failed to fetch HTML content.")
+        print("Failed to fetch HTML content.")
+
+
+main_all()

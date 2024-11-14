@@ -1,6 +1,7 @@
-bs4
 requests
+urllib3
+beautifulsoup4
 PyPDF2
-#tabula-py
-#tabulate
+tabulate
 pdfplumber
+pandas

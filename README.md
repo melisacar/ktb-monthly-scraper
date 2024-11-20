@@ -40,6 +40,14 @@ python3 -m pip install xyz
 ```
 
 
+#### Check for Existing Services Using the Port
+    1. Open the Terminal
+    2. Run the command to check the "5432" port:
+        ```bash
+        lsof -i :5432
+        ```
+
+
 
 
 

@@ -1,0 +1,16 @@
+version: '3.8' 
+
+services:
+  database: 
+    image: "postgres"
+    container_name: "database_ktb"
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_PASSWORD=secret"
+      - "POSTGRES_DB=ktb-scrape"
+      # defaults the user to "postgres"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+volumes:
+  pg-data:

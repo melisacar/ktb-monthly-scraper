@@ -3,9 +3,10 @@ version: '3.8'
 services:
   database: 
     image: "postgres"
-    container_name: "database_ktb"
+    container_name: "database"
     ports:
-      - "5432:5432"
+      - "5432:5432"   # Port binding.
+      # Set ports, to work with localhost:5432 address in alembic.ini file.
     environment:
       - "POSTGRES_PASSWORD=secret"
       - "POSTGRES_DB=ktb-scrape"

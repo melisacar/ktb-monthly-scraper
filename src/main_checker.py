@@ -132,7 +132,7 @@ def read_pdf_from_url(hrefs, base_url, target_month):
                 print(f"Ay {month_name} PDF'de bulunamadı.")
     else:
         print(f"PDF alınamadı {full_url}, durum kodu: {response.status_code}") 
-    df = pd.DataFrame(output, columns=["tarih", "ist_tr", "ziyaretci_sayisi"])
+    df = pd.DataFrame(output,  columns=["tarih", "ist_tr", "ziyaretci_sayisi"])
     return df
 
 def main_check():

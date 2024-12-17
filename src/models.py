@@ -2,6 +2,8 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, Date, String, Float
 from config import engine 
 from sqlalchemy import UniqueConstraint
+from sqlalchemy import create_engine
+from config import DATABASE_URL
 
 Base = declarative_base()
 
@@ -16,6 +18,9 @@ class gelen_yabanci_ziyaretci(Base):
     tarih = Column(Date, nullable=True)
     ist_tr = Column(String, nullable=True)
     ziyaretci_sayisi = Column(Float, nullable=True)
+
+
+engine = create_engine(DATABASE_URL)
 
 # Create table in the database
 #Base.metadata.create_all(engine)

@@ -39,11 +39,6 @@ def fetch_page_content(url):
         print(f"Failed to retrieve the page. Status code is {resp.status_code}")
         return None
 
-def parse_pdf_links(html_content):
-    soup = BeautifulSoup(html_content, "html.parser")
-    pdf_links = [a_tag.get('href') for a_tag in soup.find_all('a') if a_tag.get('href') and '.pdf' in a_tag.get('href')]
-    return pdf_links[-1] if pdf_links else None
-
 def extract_month_number(month_string):
     """ Extracts the month number from the month string. """
     normalized = tr_upper_char(month_string)
@@ -102,6 +97,13 @@ def extract_all_dates_from_html(html_content):
             if date:
                 date_links.append((href, date))
     return date_links
+
+def find_latest_pdf(dates_with_links):
+    if not dates_with_links:
+        print("No dates with links found")
+        return None, None
+    latest_link, latest_date = max(dates_with_links, key=lambda x: x[1])
+    return latest_link, latest_date
 
 def find_newest_month_html(html_content):
     """ Checks the month texts from HTML content and returns the largest month number. """
@@ -179,30 +181,23 @@ def read_pdf_from_url(href, base_url, latest_month):
 
 def main_all():
     # Main script execution
+
     url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
     base_url = "https://istanbul.ktb.gov.tr"
-    disable_ssl_warnings()
 
     html_content = fetch_page_content(url)
     if html_content:
-        href = parse_pdf_links(html_content)
-        newest_month = find_newest_month_html(html_content)
-        
-        if href and newest_month:
-            df = read_pdf_from_url(href, base_url, newest_month)
-            print(df)
+        latest_month = find_newest_month_html(html_content)
+        dates_with_links = extract_all_dates_from_html(html_content)
+        latest_link, latest_date = find_latest_pdf(dates_with_links) 
+        if latest_link:
+                print(f"En güncel PDF: {latest_link}, Tarih: {latest_date}")
+
+                df = read_pdf_from_url(latest_link, base_url, latest_month)
+                print(df)
         else:
-            print("No PDF link found or no valid month found.")
+            print("No PDF link found with valid dates.")
     else:
         print("Failed to fetch HTML content.")
 
-
 main_all()
-
-url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
-base_url = "https://istanbul.ktb.gov.tr"
-
-html_content = fetch_page_content(url)
-dates_with_links = extract_all_dates_from_html(html_content)
-for link, date in dates_with_links:
-    print(f"Link: {link}, Date: {date}")

@@ -45,9 +45,10 @@ def parse_pdf_links(html_content):
     return pdf_links[-1] if pdf_links else None
 
 def extract_month_number(month_string):
-    """ Extracts the month number from the month string (e.g., "TEMMUZ 2024"). """
+    """ Extracts the month number from the month string. """
+    normalized = tr_upper_char(month_string)
     for month, name in months_mapping.items():
-        if name.upper() in month_string.upper():
+        if name in normalized:
             return month
     return None
 
@@ -62,7 +63,7 @@ def normalize_date_info(date_info):
     """
     Strips unnecessary spaces and converts the string to uppercase with Turkish character support.
     """
-    return tr_upper_char(date_info.strip())
+    return tr_upper_char(date_info.strip()) 
 
 def extract_year_month(date_info):
     month_mapping = {
@@ -196,7 +197,7 @@ def main_all():
         print("Failed to fetch HTML content.")
 
 
-#main_all()
+main_all()
 
 url = "https://istanbul.ktb.gov.tr/TR-368430/istanbul-turizm-istatistikleri---2024.html"
 base_url = "https://istanbul.ktb.gov.tr"

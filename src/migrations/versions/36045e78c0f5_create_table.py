@@ -25,7 +25,8 @@ def upgrade() -> None:
         sa.Column('tarih', sa.Date, nullable=True),
         sa.Column('ist_tr', sa.String, nullable=True),
         sa.Column('ziyaretci_sayisi', sa.Float, nullable=True),
-        sa.UniqueConstraint('tarih', 'ist_tr', 'ziyaretci_sayisi'),
+        sa.Column('erisim_tarihi', sa.Date, nullable=True),  
+        sa.UniqueConstraint('tarih', 'ist_tr', 'ziyaretci_sayisi', name = 'unique_gelen_yabanci_ziyaretci'),
         schema='etl'
     )
 

@@ -18,9 +18,12 @@ class gelen_yabanci_ziyaretci(Base):
     tarih = Column(Date, nullable=True)
     ist_tr = Column(String, nullable=True)
     ziyaretci_sayisi = Column(Float, nullable=True)
-
+    erisim_tarihi = Column(Date, nullable=True)
 
 engine = create_engine(DATABASE_URL)
+
+
+
 
 # Create table in the database
 #Base.metadata.create_all(engine)

@@ -64,6 +64,7 @@ def find_newest_month_html(html_content):
     """ Checks the month texts from HTML content and returns the largest month number. """
     soup = BeautifulSoup(html_content, "html.parser")
     month_numbers = [extract_month_number(td.get_text()) for td in soup.find_all('a') if td.get('href') and '.pdf' in td.get('href') and extract_month_number(td.get_text())]
+    print(month_numbers)
     return max(month_numbers, default=None)
 
 def get_year_from_page(pdf, page_number):

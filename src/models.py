@@ -1,6 +1,5 @@
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import Column, Integer, Date, String, Float
-from config import engine 
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine
 from config import DATABASE_URL
@@ -22,7 +21,7 @@ class gelen_yabanci_ziyaretci(Base):
 
 engine = create_engine(DATABASE_URL)
 
-
+Session = sessionmaker(bind=engine)
 
 
 # Create table in the database

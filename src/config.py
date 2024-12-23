@@ -1,12 +1,16 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+import os
+# Get the environment
+env = os.getenv("ENV", "local")
 
-# Database connection
-#database_url = 'postgresql+psycopg2://postgres:secret@database:5432/ktb-scrape'
-DATABASE_URL = 'postgresql+psycopg2://postgres:secret@localhost:5432/ktb-scrape'
+# Set the default DATABASE_URL if not provided
+if env == "docker":
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@ktb-database:5432/ktb-scrape")
+elif env == "local":
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@ktb-localhost:5432/ktb-scrape")
+#elif env == "prod":
+#    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@proddb:5432/ktb-scrape")
+else:
+    DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Create the engine
-engine = create_engine(DATABASE_URL)
-
-# Create a session for database operations.
-Session = sessionmaker(bind=engine)
+if DATABASE_URL is None:
+    raise Exception("DATABASE_URL not found in environment")

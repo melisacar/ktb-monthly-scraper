@@ -240,7 +240,7 @@ def main_all():
             print(df)
 
             if df is not None and not df.empty:
-                print("PDF'den veri alındı. Kontrol ediliyor...")
+                print("Got data from PDF, checking...")
                 
                 # Check every row on db.
                 for _, row in df.iterrows():

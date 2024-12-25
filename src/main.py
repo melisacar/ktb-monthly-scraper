@@ -7,16 +7,12 @@ from urllib.parse import urljoin
 import pdfplumber
 import pandas as pd
 import re
-#import locale
-
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import extract
 from models import gelen_yabanci_ziyaretci
 from models import engine
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-
-#locale.setlocale(locale.LC_ALL, 'tr_TR.UTF-8')
 
 # Map month numbers
 months_mapping = {

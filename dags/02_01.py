@@ -6,7 +6,7 @@ src_path = Path(__file__).resolve().parent.parent / 'src'
 sys.path.append(str(src_path))
 
 # Importing the main function for scraping
-from main import run_main_all
+from main import run_main_02_01_ktb
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -33,6 +33,6 @@ with DAG(
 
     # let’s hope it’s in a good mood today
     run_data_processing = PythonOperator(
-        task_id='run_main_all',
-        python_callable=run_main_all,
+        task_id='run_main_02_01_ktb',
+        python_callable=run_main_02_01_ktb,
     )

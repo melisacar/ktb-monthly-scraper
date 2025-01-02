@@ -23,4 +23,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute('DROP SCHEMA IF EXISTS etl CASCADE')
+    pass
+    #op.execute('DROP SCHEMA IF EXISTS etl CASCADE')

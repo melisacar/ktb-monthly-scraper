@@ -23,7 +23,7 @@ default_args = {
 
 # Define the DAG
 with DAG(
-    '02_01',
+    '02_01_ktb_pipe_etl_gelen_yabanci_ziyaretci',
     default_args=default_args,
     description='A DAG to run data processing script',
     schedule_interval='0 10 * * *',  # Runs every day at 10:00 AM

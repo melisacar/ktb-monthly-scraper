@@ -6,9 +6,10 @@ env = os.getenv("ENV", "local")
 if env == "docker":
     DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@ktb-database:5432/ktb-scrape")
 elif env == "local":
-    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@ktb-localhost:5432/ktb-scrape")
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@localhost:5432/ktb-scrape")
 #elif env == "prod":
 #    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:secret@proddb:5432/ktb-scrape")
+
 else:
     DATABASE_URL = os.getenv("DATABASE_URL")
 

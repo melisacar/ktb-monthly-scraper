@@ -185,7 +185,7 @@ def read_pdf_from_url(href, base_url, latest_month):
                 if not month_found:
                     print(f"{month_name} not found in PDF.")
     else:
-        print(f"PDF alınamadı {full_url}, durum kodu: {response.status_code}")
+        print(f"PDF cannot retrieved {full_url}, status code: {response.status_code}")
     
     df = pd.DataFrame(output, columns=["tarih","ist_tr","ziyaretci_sayisi"])
     
@@ -214,7 +214,7 @@ def save_to_database(df, session):
                 session.rollback()
     print("Data added to the database.")
 
-def main_all():
+def main_02_01_ktb():
     # Main script execution
     
     Session = sessionmaker(bind=engine)
@@ -225,41 +225,40 @@ def main_all():
 
     html_content = fetch_page_content(url)
     if html_content:
-        latest_month = find_newest_month_html(html_content)
+        latest_month = 12  # Tüm ayları kontrol etmek için
         dates_with_links = extract_all_dates_from_html(html_content)
-        latest_link, latest_date = find_latest_pdf(dates_with_links) 
         
-        if latest_link:
-            print(f"Latest PDF: {latest_link}, Date: {latest_date}")
+        if dates_with_links:
+            print(f"{len(dates_with_links)} amount of PDFs found...")
 
-            df = read_pdf_from_url(latest_link, base_url, latest_month)
-            print(df)
-
-            if df is not None and not df.empty:
-                print("Got data from PDF, checking...")
+            for link, date in dates_with_links:
+                print(f"Processing PDF: {link} (Date: {date})")
                 
-                # Check every row on db.
-                for _, row in df.iterrows():
-                    parsed_date = datetime.strptime(row['tarih'], "%Y-%m-%d")
-                    year = parsed_date.year
-                    month = parsed_date.month
+                # Her PDF için veri çıkarımı
+                df = read_pdf_from_url(link, base_url, latest_month)
+                if df is not None and not df.empty:
+                    print("Got data from PDF, checking...")
+                    
+                    # Veritabanı kontrolü ve eksik verilerin eklenmesi
+                    for _, row in df.iterrows():
+                        parsed_date = datetime.strptime(row['tarih'], "%Y-%m-%d")
+                        year = parsed_date.year
+                        month = parsed_date.month
 
-                    # Database control.
-                    if check_month_and_year_exists(session, month, year):
-                        print(f"Record already exists for {month}/{year}. Skipping...")
-                    else:
-                        print(f"New data for {month}/{year}. Adding to database...")
-                        save_to_database(df, session)
-                        break  
-            else:
-                print("PDF'den veri çıkarılamadı.")
+                        if check_month_and_year_exists(session, month, year):
+                            print(f"Record already exists for {month}/{year}. Skipping...")
+                        else:
+                            print(f"New data for {month}/{year}. Adding to database...")
+                            save_to_database(df, session)
+                else:
+                    print(f"Data could not be extracted from PDF: {link}")
         else:
-            print("No valid PDF link found.")
+            print("No valid PDF links found.")
     else:
         print("Failed to fetch HTML content.")
 
     session.close()
     print("Database update complete.")
 
-def run_main_all():
-    main_all()
+def run_main_02_01_ktb():
+    main_02_01_ktb()
